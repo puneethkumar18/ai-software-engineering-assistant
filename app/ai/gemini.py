@@ -1,4 +1,5 @@
 from typing import Any
+import asyncio
 
 from google import genai
 from google.genai import types
@@ -19,9 +20,12 @@ class GeminiProvider(LLMProvider):
         prompt: str,
     ) -> str:
 
-        response = await self.client.aio.models.generate_content(
+        response = await asyncio.wait_for(
+            self.client.aio.models.generate_content(
             model="gemini-3.5-flash",
             contents=prompt,
+            ),
+            timeout=settings.LLM_TIMEOUT_SECONDS
         )
 
         return response.text
@@ -40,8 +44,13 @@ class GeminiProvider(LLMProvider):
             tools=[tool]
         )
 
-        return await self.client.aio.models.generate_content(
+        response =  await asyncio.wait_for(
+            self.client.aio.models.generate_content(
             model="gemini-3.5-flash",
             contents=contents,
             config=config,
+            ),
+            timeout=settings.LLM_TIMEOUT_SECONDS
         )
+
+        return response.text or ""

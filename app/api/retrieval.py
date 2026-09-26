@@ -22,7 +22,7 @@ async def search(request: RetrievalRequest,session: Session = Depends(get_db)):
         session=session,
         repository_id=request.repository_id,
         query=request.query,
-        top_k=request.tok_k,
+        top_k=request.top_k,
         document_type=request.document_type,
         language=request.language,
     )

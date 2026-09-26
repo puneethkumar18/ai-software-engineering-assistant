@@ -7,6 +7,11 @@ from app.chunking.code import (
     )
 from app.chunking.chunk import Chunk
 
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 def select_chunker(document: Document)->str:
     if document.document_type == "code":
         return "code"
@@ -43,7 +48,7 @@ def chunk_documents_with_strategy(
 )->list[Chunk]:
 
     chunks = []
-    print("files count : ", len(documents))
+    logger.debug("Files count: %d", len(documents))
     for document in documents:
         document_chunks = chunk_with_strategy(
             document=document,
@@ -51,7 +56,7 @@ def chunk_documents_with_strategy(
             overlap=overlap)
         chunks.extend(document_chunks)
 
-    print("chunks_count: ", len(chunks))
+    logger.debug("Chunks count: %d", len(chunks))
 
     return chunks
 

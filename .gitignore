@@ -4,3 +4,4 @@ __pycache__/
 *.pyc
 .env
 data/cloned_repositories/
+.DS_Store

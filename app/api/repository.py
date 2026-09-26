@@ -30,7 +30,7 @@ async def create_repository(
 
     try:
         repository = (
-            await repository_service.register_repository(
+            repository_service.register_repository(
                 session=session,
                 url=request.url
             )

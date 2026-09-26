@@ -7,6 +7,11 @@ from app.api.repository import router as repository_router
 from app.api.agent import router as agent_router
 
 
+from app.core.logging_config import setup_logging
+
+
+setup_logging()
+
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION

@@ -13,7 +13,7 @@ services:
       - DATABASE_URL=postgresql+psycopg://aiassistant:aiassistant@postgres:5432/aiassistant
 
     volumes:
-      - ./app:/app/app
+      - ./app:/app
 
     depends_on:
       postgres:

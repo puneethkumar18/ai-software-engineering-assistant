@@ -71,9 +71,6 @@ class RepositoryService:
             url=url,
         )
 
-        session.commit()
-        session.refresh(repository)
-
         return repository
 
     def clone_repository(
@@ -144,10 +141,6 @@ class RepositoryService:
 
         try:
 
-            # -------------------------
-            # CLONING
-            # -------------------------
-
             repository.error_message = None
 
             update_repository_status(
@@ -163,9 +156,6 @@ class RepositoryService:
                 destination=str(destination),
             )
 
-            # -------------------------
-            # INDEXING
-            # -------------------------
 
             update_repository_status(
                 session=session,
@@ -188,10 +178,6 @@ class RepositoryService:
                 chunk_size=chunk_size,
                 overlap=overlap,
             )
-
-            # -------------------------
-            # READY
-            # -------------------------
 
 
             repository.indexed_at = datetime.now(timezone.utc)

@@ -3,8 +3,16 @@ from app.schemas.agent import AgentResponse,AgentRequest
 from sqlalchemy.orm import Session
 from app.core.dependencies import get_db
 from app.core.agent_dependencies import create_agent
-from app.agent.tool_context import ToolContext
 from app.services.agent_service import AgentService
+
+from app.core.exceptions import (
+    RepositoryNotFoundError,
+    RepositoryNotReadyError,
+)
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 
@@ -25,27 +33,25 @@ async def ask_agent(
             agent=create_agent()
         )
 
-        result = await agent_service.answer(
+        response = await agent_service.answer(
             session=session,
             repository_id=repository_id,
             query=request.message,
         )
 
-        return AgentResponse(
-            answer=result.answer,
-            tool_calls=result.tool_calls,
-            tools_used=result.tools_used
-        )
-    except ValueError as exc:
+        return response
 
+    except RepositoryNotFoundError as exc:
         raise HTTPException(
             status_code=404,
-            detail=str(exc)
-        ) from exc
-
+            detail="Agent execution failed.",
+        )from exc
     except Exception as exc:
-
+        logger.exception(
+            "Agent API execution failed | repository_id=%s",
+            repository_id,
+        )
         raise HTTPException(
             status_code=500,
-            detail=str(exc),
+            detail="Agent execution failed.",
         ) from exc

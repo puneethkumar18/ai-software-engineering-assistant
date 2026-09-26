@@ -98,9 +98,3 @@ class MCPClient:
             )
 
             self._stdio_context = None
-
-
-
-
-        
-
